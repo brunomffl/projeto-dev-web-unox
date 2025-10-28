@@ -1,0 +1,5 @@
+class TarefasRepository{
+
+};
+
+export { TarefasRepository };
