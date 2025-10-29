@@ -8,7 +8,7 @@ class UserService{
         this.userRepository = new UserRepository();
     }
 
-    create(id, nome, email,role = "user"){
+    create(nome, email, role = "user"){
         const user = { id: proxId, nome, email, role };
         proxId++;
         this.userRepository.insert(user);

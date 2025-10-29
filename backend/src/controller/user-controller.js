@@ -7,10 +7,10 @@ class UserController {
     }
 
     create(req, res){
-        const { nome, email, role } = req.body;
-        if(!nome || !email){
-            return res.status(400).json({ message: "Nome ou e-mail não foram informados!" });
+        if(!req.body.nome && !req.body.email){
+            return res.status(400).json({ message: "Nome ou e-mail não foram informados" });
         }
+        const { nome, email, role } = req.body;
         this.userService.create(nome, email, role);
 
         return res.status(201).json({ message: "Usuário criado com sucesso!" });
