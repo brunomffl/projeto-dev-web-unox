@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 //importar as rotas
 //importar middleware de erro
 

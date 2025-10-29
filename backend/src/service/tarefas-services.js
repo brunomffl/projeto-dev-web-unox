@@ -1,7 +1,31 @@
-import { TarefasRepository } from "../repository/tarefas-repository.js";
+const tarefasRepository = require("../repository/tarefas-repository.js");
+let proximoID=2;
 
-class TarefasService{
-
+exports.createTarefas = (nome, categoria) =>{
+    const tarefa = {id: proximoID++, nome: nome, categoria: categoria};
+    proximoID++;
+    tarefasRepository.insert(tarefa);
+    return tarefa;
 };
 
-export { TarefasService };
+exports.getAll = () =>{
+    return tarefasRepository.getAll();
+};
+
+exports.getById = (id) =>{
+    return tarefasRepository.getById(id);
+};
+
+exports.update = (id, nome, categoria) =>{
+    let tarefa = tarefasRepository.update(id, nome, categoria);
+    return tarefa;
+};
+
+exports.updateFull = (id, nome, categoria) =>{
+    let tarefa = tarefasRepository.updateFull(id, nome, categoria);
+    return tarefa;
+};
+
+exports.delete = (id) =>{
+    return tarefasRepository.delete(id);
+};
