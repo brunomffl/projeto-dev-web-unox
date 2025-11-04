@@ -1,7 +1,7 @@
+
 import express from "express";
 import session from "express-session";
-//importar as rotas
-//importar middleware de erro
+import { routes } from "./routes/index.js";
 
 const app = express();
 
@@ -22,7 +22,6 @@ app.use(session({
     }
 }));
 
-//app.use(rotas)
-//app.use(middlewa de erro)
+app.use(routes)
 
 export { app };
