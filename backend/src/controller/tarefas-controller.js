@@ -1,9 +1,19 @@
-const tarefasRepository = require("../repository/tarefas-repository.js");
+const tarefasService = require("../service/tarefas-services.js");
 let proximoID=2;
 
-exports.CreateTarefas = (req, res) =>{
-    const { nome, categoria } = req.body;
-    const tarefa = tarefasService.createTarefas(nome, categoria);
+exports.CreateTarefas = (req, res) => {
+    const { nome, categoriaId } = req.body;
+    
+    if(!nome){
+        return res.status(400).json({message: 'Nome é obrigatório'});
+    }
+    
+    const tarefa = tarefasService.createTarefas(nome, categoriaId);
+    
+    if(tarefa.error){
+        return res.status(400).json({message: tarefa.error});
+    }
+    
     res.status(201).json(tarefa);
 };
 
@@ -21,14 +31,21 @@ exports.getById = (req, res) =>{
     res.status(201).json(tarefa);
 }
 
-exports.update = (req, res) =>{
+exports.update = (req, res) => {
     const id = parseInt(req.params.id);
-    const {categoria} = req.body;
-    const tarefa = tarefasService.getByID(id);
+    const { categoriaId } = req.body;
+    const tarefa = tarefasService.getById(id);
     if(!tarefa){
         return res.status(404).json({message: 'Tarefa não encontrada'});
-    }if (categoria) {
-        tarefa.categoria = categoria;;
+    }
+    if (categoriaId) {
+        const categoriaService = require("../service/categoria-service.js");
+        const categoria = categoriaService.getById(categoriaId);
+        if(!categoria){
+            return res.status(400).json({message: 'Categoria não encontrada'});
+        }
+        tarefa.categoriaId = categoriaId;
+        tarefa.categoria = categoria.nome;
     }
     res.status(200).json(tarefa);
 };
@@ -44,10 +61,10 @@ exports.updateFull = (req, res) =>{
 
     if(!nome){
         return res.status(400).json({message: 'Nome é obrigatório'});
-    }if(!categoria){
-        return res.status(400).json({message: 'Categoria é obrigatória'});
     }
-    tarefa = tarefasService.updateFull(id, nome, categoria);
+    
+    const { categoriaId } = req.body;
+    tarefa = tarefasService.updateFull(id, nome, categoriaId);
     res.status(200).json({message: 'Tarefa atualizada totalmente com sucesso', tarefa});
 
 }
