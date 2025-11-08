@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const categoriaController = require('../controller/categoria-controller');
+const { verificarAutenticacao, verificarAdmin } = require('../middleware/auth-middleware');
 
-router.post('/categorias', categoriaController.CreateCategoria);
+// Listar categorias - usuários autenticados podem ver
+router.get('/categorias', verificarAutenticacao, categoriaController.getAll);
 
-router.get('/categorias', categoriaController.getAll);
+router.get('/categorias/:id', verificarAutenticacao, categoriaController.getById);
 
-router.get('/categorias/:id', categoriaController.getById);
+// Gerenciar categorias - apenas admin
+router.post('/categorias', verificarAdmin, categoriaController.CreateCategoria);
 
-router.patch('/categorias/:id', categoriaController.update);
+router.patch('/categorias/:id', verificarAdmin, categoriaController.update);
 
-router.put('/categorias/:id', categoriaController.updateFull);
+router.put('/categorias/:id', verificarAdmin, categoriaController.updateFull);
 
-router.delete('/categorias/:id', categoriaController.delete);
+router.delete('/categorias/:id', verificarAdmin, categoriaController.delete);
 
 module.exports = router;

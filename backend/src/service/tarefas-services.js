@@ -2,7 +2,7 @@ const tarefasRepository = require("../repository/tarefas-repository.js");
 const categoriaService = require("./categoria-service.js");
 let proximoID=2;
 
-exports.createTarefas = (nome, categoriaId) => {
+exports.createTarefas = (nome, categoriaId, usuarioId) => {
     let categoria;
     
     // Se não informou categoria, usa a padrão
@@ -19,15 +19,21 @@ exports.createTarefas = (nome, categoriaId) => {
         id: proximoID++, 
         nome: nome, 
         categoriaId: categoria.id,
-        categoria: categoria.nome
+        categoria: categoria.nome,
+        usuarioId: usuarioId
     };
     proximoID++;
     tarefasRepository.insert(tarefa);
     return tarefa;
 };
 
-exports.getAll = () =>{
-    return tarefasRepository.getAll();
+exports.getAll = (usuarioId, isAdmin) => {
+    // Se for admin, retorna todas as tarefas
+    if(isAdmin){
+        return tarefasRepository.getAll();
+    }
+    // Se for usuário comum, retorna apenas suas tarefas
+    return tarefasRepository.getByUsuario(usuarioId);
 };
 
 exports.getById = (id) =>{

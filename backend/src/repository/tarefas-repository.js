@@ -1,6 +1,6 @@
 let repository = [
-    {id: 0, nome: 'trabalho de casa', categoriaId: 1, categoria: 'SEM CATEGORIA'},
-    {id: 1, nome: 'user', categoriaId: 1, categoria: 'SEM CATEGORIA'}
+    {id: 0, nome: 'trabalho de casa', categoriaId: 1, categoria: 'SEM CATEGORIA', usuarioId: 1},
+    {id: 1, nome: 'user', categoriaId: 1, categoria: 'SEM CATEGORIA', usuarioId: 1}
 ]
 let proximoID=2;
 
@@ -10,6 +10,12 @@ let proximoID=2;
     exports.getAll = () =>{
         return repository;
     }
+    
+    // Método para buscar tarefas por usuário
+    exports.getByUsuario = (usuarioId) => {
+        return repository.filter(t => t.usuarioId === usuarioId);
+    }
+    
     exports.getById = (id) => {
         return repository.find(t => t.id === id);
     }

@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const tarefasController = require('../controller/tarefas-controller');
+const { verificarAutenticacao, verificarProprietarioTarefa } = require('../middleware/auth-middleware');
 
-router.post('/tarefas', tarefasController.CreateTarefas);
+// Aplicar middleware de autenticação em todas as rotas de tarefas
+router.use(verificarAutenticacao);
 
-router.get('/tarefas', tarefasController.getAll);
+router.post('/tarefas', verificarProprietarioTarefa, tarefasController.CreateTarefas);
 
-router.get('/tarefas/:id', tarefasController.getById);
+router.get('/tarefas', verificarProprietarioTarefa, tarefasController.getAll);
 
-router.patch('/tarefas/:id', tarefasController.update);
+router.get('/tarefas/:id', verificarProprietarioTarefa, tarefasController.getById);
 
-router.put('/tarefas/:id', tarefasController.updateFull);
+router.patch('/tarefas/:id', verificarProprietarioTarefa, tarefasController.update);
 
-router.delete('/tarefas/:id', tarefasController.delete);
+router.put('/tarefas/:id', verificarProprietarioTarefa, tarefasController.updateFull);
+
+router.delete('/tarefas/:id', verificarProprietarioTarefa, tarefasController.delete);
 
 module.exports = router;
